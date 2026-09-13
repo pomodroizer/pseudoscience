@@ -1,0 +1,47 @@
+<div class="max-w-2xl mx-auto space-y-8">
+  <div class="space-y-2">
+    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+      <span>Community Submissions</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white tracking-tight">Report a Pseudoscience Claim</h1>
+    <p class="text-sm text-slate-400">
+      Did you spot a viral video, supplement ad, or social media post promoting dangerous health advice or unproven cures? Submit it here to be ingested into our scientific verification pipeline.
+    </p>
+  </div>
+
+  <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-8 space-y-6 shadow-2xl">
+    <%= form_with model: @report, url: reports_path, class: "space-y-5" do |f| %>
+      <div class="space-y-1.5">
+        <%= f.label :claim_text, "What is the claim being made?", class: "text-xs font-bold uppercase tracking-wider text-slate-300 block" %>
+        <span class="text-xs text-slate-500 block">Describe the promised cure, health outcome, or deceptive product:</span>
+        <%= f.text_area :claim_text, rows: 4, value: params[:claim_text], placeholder: "e.g. Video claims drinking 1 tsp of borax in warm water daily cleanses heavy metals and reverses rheumatoid arthritis...", class: "w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 resize-none", required: true %>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="space-y-1.5">
+          <%= f.label :platform, "Platform / Origin", class: "text-xs font-bold uppercase tracking-wider text-slate-300 block" %>
+          <%= f.select :platform, [["TikTok", "TikTok"], ["Instagram / Reels", "Instagram"], ["Facebook / Meta Ads", "Facebook"], ["YouTube / Shorts", "YouTube"], ["Telegram", "Telegram"], ["Website / Blog", "Web"], ["Other", "Other"]], {}, class: "w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-emerald-500" %>
+        </div>
+
+        <div class="space-y-1.5">
+          <%= f.label :source_url, "Source URL (Optional)", class: "text-xs font-bold uppercase tracking-wider text-slate-300 block" %>
+          <%= f.url_field :source_url, placeholder: "https://tiktok.com/@video/123...", class: "w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500" %>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Reports are reviewed anonymously</span>
+        <%= f.submit "Submit for Verification →", class: "bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-emerald-500/20 cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="bg-slate-900/40 border border-slate-800/80 p-5 rounded-2xl text-xs text-slate-400 space-y-2">
+    <h3 class="font-bold text-slate-300">How We Process Reports:</h3>
+    <ol class="list-decimal list-inside space-y-1 text-slate-400">
+      <li>Our AI parser extracts the active substance and target condition.</li>
+      <li>We automatically cross-reference PubMed randomized controlled trials and FDA warning databases.</li>
+      <li>If evidence of harm or regulatory fraud is found, it is indexed in the public Claims Directory and B2B Guard API.</li>
+    </ol>
+  </div>
+</div>

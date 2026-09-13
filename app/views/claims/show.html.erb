@@ -1,0 +1,125 @@
+<div class="max-w-4xl mx-auto space-y-8">
+  <!-- Breadcrumb -->
+  <div class="flex items-center space-x-2 text-xs text-slate-500">
+    <%= link_to "← Back to Claims Directory", claims_path, class: "hover:text-slate-300 transition" %>
+    <span>/</span>
+    <span class="text-slate-400 truncate"><%= @claim.title %></span>
+  </div>
+
+  <!-- Main Claim Header -->
+  <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-8 space-y-6 shadow-2xl">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <span class="text-xs font-semibold text-slate-300 bg-slate-800 px-3 py-1 rounded-lg">
+        <%= @claim.category %>
+      </span>
+
+      <div class="flex items-center space-x-3">
+        <!-- Verdict Badge -->
+        <% if @claim.verdict == 'refuted' %>
+          <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wide bg-rose-950 text-rose-300 border border-rose-800/80">
+            Verdict: Refuted by Science
+          </span>
+        <% elsif @claim.verdict == 'unsubstantiated' %>
+          <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wide bg-amber-950 text-amber-300 border border-amber-800/80">
+            Verdict: Unsubstantiated
+          </span>
+        <% else %>
+          <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wide bg-slate-800 text-slate-300 border border-slate-700">
+            Verdict: <%= @claim.verdict.humanize %>
+          </span>
+        <% end %>
+
+        <!-- Harm Severity Gauge -->
+        <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold <%= @claim.harm_score >= 4 ? 'bg-rose-950/80 text-rose-400 border border-rose-800/60' : 'bg-amber-950/80 text-amber-400 border border-amber-800/60' %>">
+          Hazard Severity: <%= @claim.harm_score %> / 5
+        </span>
+      </div>
+    </div>
+
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+      <%= @claim.title %>
+    </h1>
+
+    <!-- Scientific Breakdown -->
+    <div class="space-y-3 pt-4 border-t border-slate-800">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-400 flex items-center">
+        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+        Scientific Consensus & Mechanism Analysis
+      </h2>
+      <p class="text-base text-slate-300 leading-relaxed bg-slate-950/60 p-5 rounded-2xl border border-slate-800/60">
+        <%= @claim.scientific_summary %>
+      </p>
+    </div>
+
+    <!-- Regulatory Warning Callout -->
+    <% if @claim.regulatory_warning.present? %>
+      <div class="bg-rose-950/40 border border-rose-800/60 rounded-2xl p-5 space-y-2">
+        <div class="flex items-center space-x-2 text-rose-400 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>Official Regulatory Warning & Enforcement</span>
+        </div>
+        <p class="text-sm text-rose-200/90 leading-relaxed">
+          <%= @claim.regulatory_warning %>
+        </p>
+      </div>
+    <% end %>
+
+    <!-- Vectors Tagging -->
+    <% if @claim.origin_vectors.present? && @claim.origin_vectors.any? %>
+      <div class="flex items-center space-x-2 pt-2 text-xs text-slate-400">
+        <span class="text-slate-500">Known distribution channels:</span>
+        <% @claim.origin_vectors.each do |vector| %>
+          <span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md"><%= vector %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Peer-Reviewed Evidence Section -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-xl font-bold text-white tracking-tight">Peer-Reviewed Evidence & Citations</h2>
+      <span class="text-xs text-slate-500 font-mono"><%= pluralize(@citations.count, "Study") %> Linked</span>
+    </div>
+
+    <% if @citations.any? %>
+      <div class="space-y-3">
+        <% @citations.each do |citation| %>
+          <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 space-y-2 hover:border-slate-700 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-2 py-0.5 rounded">
+                <%= citation.source %> <%= "• #{citation.external_id}" if citation.external_id.present? %>
+              </span>
+              <%= link_to "View Original Source ↗", citation.url, target: "_blank", rel: "noopener", class: "text-xs text-slate-400 hover:text-white transition font-medium" %>
+            </div>
+
+            <h3 class="text-base font-bold text-white">
+              <%= citation.title %>
+            </h3>
+
+            <% if citation.conclusion.present? %>
+              <p class="text-xs text-slate-400 italic">
+                "<%= citation.conclusion %>"
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-slate-500 italic">No formal citations indexed for this claim yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Action CTA -->
+  <div class="p-6 rounded-2xl border border-slate-800 bg-slate-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div>
+      <h3 class="text-sm font-bold text-white">Are you marketing health products?</h3>
+      <p class="text-xs text-slate-400">Test your ad copy against our linter to ensure you avoid prohibited disease claims.</p>
+    </div>
+    <%= link_to "Test Copy in Linter →", linter_path, class: "bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs transition shrink-0" %>
+  </div>
+</div>

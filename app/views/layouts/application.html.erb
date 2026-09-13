@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+  <head>
+    <title><%= content_for(:title) || "Pseudoscience Intelligence & Claim Linter" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Automated health claim verification, pseudoscience threat intelligence, and FTC/FDA compliance linter.">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-full flex flex-col bg-slate-950 text-slate-200 antialiased font-sans">
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-8">
+          <%= link_to root_path, class: "flex items-center space-x-3 text-lg font-bold tracking-tight text-white hover:text-emerald-400 transition" do %>
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20">
+              Ψ
+            </div>
+            <span>Pseudoscience<span class="text-emerald-400 font-normal">.io</span></span>
+          <% end %>
+
+          <nav class="hidden md:flex space-x-6 text-sm font-medium">
+            <%= link_to "Claims Directory", claims_path, class: "text-slate-300 hover:text-white transition #{'text-emerald-400 font-semibold' if controller_name == 'claims'}" %>
+            <%= link_to "Compliance Linter", linter_path, class: "text-slate-300 hover:text-white transition #{'text-emerald-400 font-semibold' if controller_name == 'linter'}" %>
+            <%= link_to "Report a Claim", new_report_path, class: "text-slate-300 hover:text-white transition #{'text-emerald-400 font-semibold' if controller_name == 'reports'}" %>
+          </nav>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-950/80 border border-emerald-800/60 text-emerald-400">
+            <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Live Intelligence
+          </span>
+          <%= link_to "API Docs", "/api/v1/claims", class: "text-xs font-mono text-slate-400 hover:text-slate-200 border border-slate-800 rounded-lg px-2.5 py-1.5 hover:border-slate-700 transition" %>
+        </div>
+      </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <% if flash[:notice] %>
+      <div class="max-w-7xl mx-auto px-4 mt-4 w-full">
+        <div class="bg-emerald-950/90 border border-emerald-700/60 text-emerald-200 px-4 py-3 rounded-xl flex items-center shadow-lg">
+          <svg class="w-5 h-5 mr-3 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span class="text-sm font-medium"><%= flash[:notice] %></span>
+        </div>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="max-w-7xl mx-auto px-4 mt-4 w-full">
+        <div class="bg-rose-950/90 border border-rose-700/60 text-rose-200 px-4 py-3 rounded-xl flex items-center shadow-lg">
+          <svg class="w-5 h-5 mr-3 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span class="text-sm font-medium"><%= flash[:alert] %></span>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p>© 2026 Pseudoscience Threat Intelligence & Compliance. Dedicated to evidence-based science.</p>
+        <div class="flex space-x-6 text-slate-400">
+          <%= link_to "Claims Directory", claims_path, class: "hover:text-slate-200" %>
+          <%= link_to "Linter Playground", linter_path, class: "hover:text-slate-200" %>
+          <%= link_to "Report Claim", new_report_path, class: "hover:text-slate-200" %>
+          <%= link_to "JSON API", "/api/v1/claims", class: "hover:text-slate-200" %>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
