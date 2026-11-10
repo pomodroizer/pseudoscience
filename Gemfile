@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.3", ">= 7.2.3.2"
+gem "rails", "~> 8.1.4"
 
 # Pin json gem to ~> 2.8 due to ActiveRecord 7.2 quirks_mode compatibility
 gem "json", "~> 2.8"
