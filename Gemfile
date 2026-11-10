@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 7.2.3", ">= 7.2.3.2"
 
 # Pin json gem to ~> 2.8 due to ActiveRecord 7.2 quirks_mode compatibility
-gem "json", "~> 2.8"
+gem "json", "~> 3.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use postgresql as the database for Active Record
