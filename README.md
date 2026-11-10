@@ -45,7 +45,7 @@ An evidence-based platform and automated compliance engine designed to counter h
 
 ### 2. Installation
 ```bash
-git clone git@github.com:PomodroizerLTD/pseudoscience.git
+git clone git@github.com:pomodroizer/pseudoscience.git
 cd pseudoscience
 bundle install
 ```
